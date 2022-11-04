@@ -70,8 +70,8 @@ client.on_message = on_message
 # subscribe to all topics of encyclopedia by using the wildcard "#"
 client.subscribe("pro/music", qos=1)
 
-path = "/home/pi/Music/"
-dir_list = os.listdir(path)
-print(str(dir_list))
+#path = "/home/pi/Music/"
+#dir_list = os.listdir(path)
+#print(str(dir_list))
 
 client.loop_forever()
