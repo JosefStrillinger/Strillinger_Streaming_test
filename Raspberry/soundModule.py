@@ -1,10 +1,12 @@
 from ctypes import sizeof
+import io
 from msilib.schema import PublishComponent
 import os
 from urllib.parse import urlparse
 import paho.mqtt.client as paho
 from paho import mqtt
 from pygame import mixer
+from pydub import AudioSegment
 
 directory = "/home/pi/Music/"
 
@@ -26,7 +28,11 @@ def on_message(client, userdata, msg):
     received = msg.payload.decode("utf-8").split("-");
     if(received[0] != "raspi"):
         if(len(received) == 3):
-            song = directory + received[2]
+            bytes_data = bytearray(received[2].encode("utf-8"))
+            #TODO: test the two solutions and choose one
+            #song = mixer.Sound(bytes_data)
+            s = io.BytesIO(bytes_data)
+            song = AudioSegment(bytes_data, sample_width=2, frame_rate=44100, channels=2)
             mixer.music.load(song)
             mixer.music.play()
             print(received[0] + ": " + received[1] + ", " + received[2])

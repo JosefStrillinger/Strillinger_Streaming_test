@@ -1,5 +1,6 @@
 import json
 import os
+import wave
 from flask_restful import Api
 from requests import request
 #from model import Question, getRandomQuestion, getData, Service, AllQuests, getQuests
@@ -44,6 +45,8 @@ def on_connect(client, userdata, flags, rc, properties=None):
 allSongs = []
 neededSongs = []
 songsReceived = False
+path = "Music"
+songs_in_dir = []
 
 def on_message(client, userdata, msg):
     neededSongs.clear()
@@ -108,23 +111,20 @@ def showSongs():
     #client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
     #time.sleep(1)
     #client.loop_stop()
-    path = "/Music/"
-    dir_list = os.listdir(path)
-    return render_template("songs.html", songs = dir_list)
+    songs_in_dir = os.listdir(path)
+    return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
 @app.route('/play')
 @app.route('/play/<name>')
 def play(name):
     print(name)
+    wave_data = wave.open(path + "/" + name, "r")
+    bytes_data = wave_data.readframes(-1)
     client.loop_start()
-    client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + name+".mp3", qos=1)
+    client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + str(bytes_data), qos=1)
     client.loop_stop()
     time.sleep(0.1)
-    client.loop_start()
-    client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
-    time.sleep(0.1)
-    client.loop_stop()
-    return render_template("songs.html", songs=getMusicInfo(neededSongs))
+    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
 
 @app.route('/stop')
 def stop():
@@ -133,12 +133,8 @@ def stop():
     #time.sleep(1)
     client.loop_stop()
     time.sleep(0.1)
-    client.loop_start()
-    client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
-    time.sleep(0.1)
-    client.loop_stop()
     #mixer.music.stop()
-    return render_template("songs.html", songs=getMusicInfo(neededSongs))
+    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
 
 @app.route('/pause')
 def pause():
@@ -146,12 +142,8 @@ def pause():
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-" + "pause", qos=1)
     client.loop_stop()
     time.sleep(0.1)
-    client.loop_start()
-    client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
-    time.sleep(1)
-    client.loop_stop()
     #mixer.music.pause()
-    return render_template("songs.html", songs=getMusicInfo(neededSongs))
+    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
 
 @app.route('/unpause')
 def unpause():
@@ -159,12 +151,8 @@ def unpause():
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-" + "unpause", qos=1)
     client.loop_stop()
     time.sleep(0.1)
-    client.loop_start()
-    client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
-    time.sleep(1)
-    client.loop_stop()
     #mixer.music.unpause()
-    return render_template("songs.html", songs=getMusicInfo(neededSongs))  
+    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))  
 
 @app.route('/volume')
 @app.route('/volume/<volume>')
@@ -177,12 +165,8 @@ def volume(volume):
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-"+str(valPyGame), qos=1)
     client.loop_stop()
     time.sleep(1)
-    client.loop_start()
-    client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
-    time.sleep(1)
-    client.loop_stop()
     print(valPyGame)
-    return render_template("songs.html", songs = getMusicInfo(neededSongs))
+    return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
 #TODO: Sound ändern einfügen
 
