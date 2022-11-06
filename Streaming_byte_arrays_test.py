@@ -20,19 +20,39 @@ music_to_play = music_folder / "EverythingBlack.wav"
 def split_audio(start, end, file):
     start = start * 1000
     end = end * 1000
-    newAudio = AudioSegment.from_wav(file)
+    newAudio = AudioSegment.from_file(file, "mp3")
     newAudio = newAudio[start:end]
     newAudio.export("newSong.wav", format="wav")
     
-split_audio(0, 10, "flask_website/music/EverythingBlack.wav")
+#split_audio(0, 10, "flask_website/music/EverythingBlack.wav")
+path_to_fate = Path("D:\\GitHubDirectory\\Strillinger_Streaming_test\\flask_website\\music\\Fate.mp3")
+split_audio(0, 10, "flask_website/music/Fate.mp3")
+#split_audio(0, 30, "flask_website/music/ChildrenOfTheOmnissiah.wav")
+
 
 wave_data = wave.open("newSong.wav", "rb")
 #wave_data = wave.open("flask_website/music/EverythingBlack.wav", "rb")
 bytes_data = wave_data.readframes(-1)
+#bytes_data = bytearray(wave_data) ==> Funktioniert nicht
 
-string_test = bytes_data.decode("utf-8")#muss noch überprüft werden, wie man am besten von string zu byte und wieder zurück convertiert
+f = open("newSong.wav", "rb")
+wav_data = f.read()
+f.close()
+byte_data = bytearray(wav_data)
 
-new_bytes = string_test.encode("utf-8")
+#f = open("bytes_data.txt", "wb")
+#f.write(bytes_data)
+#f.close()
+#
+#f1 = open("str_data.txt", "w")
+#f1.write(str(bytes_data))
+#f1.close()
+
+#time.sleep(5)
+
+string_test = byte_data.decode("latin-1")
+
+new_bytes = string_test.encode("latin-1")
 
 song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
 song.export("file.wav", format="wav")
