@@ -7,9 +7,13 @@ import io
 import time
 from pathlib import Path
 import simpleaudio as sa
+import youtube_dl
 
 music_folder = Path("flask_website/music/")
 music_to_play = music_folder / "EverythingBlack.wav"
+
+AudioSegment.converter = "D:\\Apps\\ffmpeg-5.1.2-full_build\\ffmpeg-5.1.2-full_build\\bin\\ffmpeg.exe"
+AudioSegment.ffprobe = "D:\\Apps\\ffmpeg-5.1.2-full_build\\ffmpeg-5.1.2-full_build\\bin\\ffprobe.exe"
 
 #with wave.open("flask_website/music/EverythingBlack.wav") as fd:
 #   params = fd.getparams()
@@ -20,13 +24,13 @@ music_to_play = music_folder / "EverythingBlack.wav"
 def split_audio(start, end, file):
     start = start * 1000
     end = end * 1000
-    newAudio = AudioSegment.from_file(file, "mp3")
+    newAudio = AudioSegment.from_mp3(file)
     newAudio = newAudio[start:end]
     newAudio.export("newSong.wav", format="wav")
     
 #split_audio(0, 10, "flask_website/music/EverythingBlack.wav")
 path_to_fate = Path("D:\\GitHubDirectory\\Strillinger_Streaming_test\\flask_website\\music\\Fate.mp3")
-split_audio(0, 10, "flask_website/music/Fate.mp3")
+split_audio(0, 10, "flask_website/music/Fate.wav")
 #split_audio(0, 30, "flask_website/music/ChildrenOfTheOmnissiah.wav")
 
 
@@ -35,9 +39,8 @@ wave_data = wave.open("newSong.wav", "rb")
 bytes_data = wave_data.readframes(-1)
 #bytes_data = bytearray(wave_data) ==> Funktioniert nicht
 
-f = open("newSong.wav", "rb")
-wav_data = f.read()
-f.close()
+with open("newSong.wav", "rb") as f:
+    wav_data = f.read()
 byte_data = bytearray(wav_data)
 
 #f = open("bytes_data.txt", "wb")
