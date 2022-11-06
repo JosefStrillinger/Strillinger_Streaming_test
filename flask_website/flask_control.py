@@ -11,6 +11,7 @@ import time
 import paho.mqtt.client as paho
 from paho import mqtt
 import time
+from pydub import AudioSegment
 
 #
 # Copyright 2021 HiveMQ GmbH
@@ -114,20 +115,32 @@ def showSongs():
     #client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-getSongs", qos=1)
     #time.sleep(1)
     #client.loop_stop()
+    global songs_in_dir 
     songs_in_dir = os.listdir(path)
     return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
 @app.route('/play')
 @app.route('/play/<name>')
 def play(name):
+    global songs_in_dir
     print(name)
-    wave_data = wave.open(path + "/" + name, "r")
+    split_audio(0, 20, path + "/" + name, "r")
+    #wave_data = wave.open(path + "/" + name, "r")
+    wave_data = wave.open("newSong.wav")
     bytes_data = wave_data.readframes(-1)
     client.loop_start()
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + str(bytes_data), qos=1)
     client.loop_stop()
     time.sleep(0.1)
     return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+
+def split_audio(start, end, file):
+    start = start * 1000
+    end = end * 1000
+    newAudio = AudioSegment.from_wav(file)
+    newAudio = newAudio[start:end]
+    newAudio.export("newSong.wav", format="wav")
+    
 
 @app.route('/stop')
 def stop():

@@ -60,7 +60,7 @@
     padding: 10px;
     }
   
-  button::before {
+  .button::before {
     content: '';
     border-radius: 300px;
     min-width: calc(150px + 0px);

@@ -47,22 +47,23 @@
         <td>{{s.id}}</td>
         <td>{{s.name}}</td>
         <td>
-          <button class="button" href="/play/{{s.name}}" role="button">Play</button>
+          <a class="button" href="/play/{{s.name}}" role="button">Play</a>
         </td>
         <td>
-          <button class="button" href="/stop" role="button">Stop</button>
+          <a class="button" href="/stop" role="button">Stop</a>
         </td>
         <td>
-          <button class="button" href="/pause" role="button">Pause</button>
+          <a class="button" href="/pause" role="button">Pause</a>
         </td>
         <td>
-          <button class="button" href="/unpause" role="button">Unpause</button>
+          <a class="button" href="/unpause" role="button">Unpause</a>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
   <!--TODO: Control Bar schreiben (so wie Spotify), dazu noch zu machen:
+          - Css von Buttons fixen ==> damit sie wieder sexy aussehen
           - Control bar soll unten kleben und immer zu sehen sein, solange man bei songs ist
           - Die 3 Buttons neben einander in der Mitte platzieren
           - Volumne zu einem Slider ändern
@@ -76,13 +77,13 @@
     <div class="control-bar-buffer"></div>
     <div class="control-bar-actions">
       <div class="control-bar-actions-stop">
-        <button class="button" href="/stop" role="button">Stop</button>
+        <a class="button" href="/stop" role="button">Stop</a>
       </div>
       <div class="control-bar-actions-pause">
-        <button class="button" href="/pause" role="button">Pause</button>
+        <a class="button" href="/pause" role="button">Pause</a>
       </div>
       <div class="control-bar-actions-unpause">
-        <button class="button" href="/unpause" role="button">Unpause</button>
+        <a class="button" href="/unpause" role="button">Unpause</a>
       </div>
     </div>
     <div class="control-bar-buffer"></div>
