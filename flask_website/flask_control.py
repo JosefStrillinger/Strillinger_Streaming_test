@@ -2,7 +2,7 @@ import json
 import os
 import wave
 from flask_restful import Api
-from requests import request
+#from requests import request
 #from model import Question, getRandomQuestion, getData, Service, AllQuests, getQuests
 from rest import MusicInfo, Service, getMusicInfo
 from flask import Flask, render_template, session, request, url_for
