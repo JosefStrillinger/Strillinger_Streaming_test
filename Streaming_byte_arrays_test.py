@@ -8,12 +8,11 @@ import time
 from pathlib import Path
 import simpleaudio as sa
 import youtube_dl
+from mutagen.wave import WAVE
+import math
 
 music_folder = Path("flask_website/music/")
 music_to_play = music_folder / "EverythingBlack.wav"
-
-AudioSegment.converter = "D:\\Apps\\ffmpeg-5.1.2-full_build\\ffmpeg-5.1.2-full_build\\bin\\ffmpeg.exe"
-AudioSegment.ffprobe = "D:\\Apps\\ffmpeg-5.1.2-full_build\\ffmpeg-5.1.2-full_build\\bin\\ffprobe.exe"
 
 #with wave.open("flask_website/music/EverythingBlack.wav") as fd:
 #   params = fd.getparams()
@@ -27,10 +26,16 @@ def split_audio(start, end, file):
     newAudio = AudioSegment.from_mp3(file)
     newAudio = newAudio[start:end]
     newAudio.export("newSong.wav", format="wav")
-    
+ 
+def get_audio_duration(song):
+    audio = WAVE(song)
+    audio_info = audio.info
+    length = int(audio_info.length)
+    return length
+       
 #split_audio(0, 10, "flask_website/music/EverythingBlack.wav")
 path_to_fate = Path("D:\\GitHubDirectory\\Strillinger_Streaming_test\\flask_website\\music\\Fate.mp3")
-split_audio(0, 10, "flask_website/music/Fate.wav")
+split_audio(210, 220, "flask_website/music/Fate.wav")
 #split_audio(0, 30, "flask_website/music/ChildrenOfTheOmnissiah.wav")
 
 
@@ -56,10 +61,17 @@ byte_data = bytearray(wav_data)
 
 string_test = byte_data.decode("latin-1")
 
+time.sleep(2)
+
 new_bytes = string_test.encode("latin-1")
 
 song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
 song.export("file.wav", format="wav")
+
+test_length = get_audio_duration("flask_website/music/Fate.wav")
+
+print(test_length)
+print(math.ceil(test_length/10))
 
 wave_obj = sa.WaveObject.from_wave_read(wave_data)
 

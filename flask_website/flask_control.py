@@ -12,6 +12,8 @@ import paho.mqtt.client as paho
 from paho import mqtt
 import time
 from pydub import AudioSegment
+from mutagen.wave import WAVE
+import math
 
 #
 # Copyright 2021 HiveMQ GmbH
@@ -89,6 +91,7 @@ client.on_message = on_message
 
 # subscribe to all topics of encyclopedia by using the wildcard "#"
 client.subscribe("pro/music", qos=1)
+client.subscribe("pro/status", qos=1)
 # a single publish, this can also be done in loops, etc.
 
 #client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-play-Everything_Black.mp3", qos=1)
@@ -102,8 +105,39 @@ app = Flask(__name__)
 app.secret_key = "epjsmp2021/22"
 api = Api(app)
 
-
 #url_for('static', filename='style.css')
+
+def get_songs_in_dir(path):
+    global songs_in_dir 
+    songs_in_dir = os.listdir(path)
+
+def split_audio(start, end, file, export_name):
+    start = start * 1000
+    end = end * 1000
+    newAudio = AudioSegment.from_mp3(file)
+    newAudio = newAudio[start:end]
+    newAudio.export(export_name + ".wav", format="wav")
+ 
+def get_audio_duration(song):
+    audio = WAVE(song)
+    audio_info = audio.info
+    length = int(audio_info.length)
+    return length
+
+def audio_streaming(song_path, name):
+    length_in_seconds = get_audio_duration(song_path)
+    for i in range(math.ceil(length_in_seconds/10)):
+        split_audio(i*10, i*10+10, song_path, name+str(i))
+        with open(name+str(i)+".wav", "rb") as f:
+            wav_data = f.read()    
+        byte_data = bytearray(wav_data)
+        in_string = byte_data.decode("latin-1")
+        client.loop_start()
+        client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
+        client.loop_stop()
+        os.remove(name+str(i)+".wav")
+        time.sleep(1)
+
 
 @app.route('/')
 def start():
@@ -119,59 +153,27 @@ def showSongs():
     songs_in_dir = os.listdir(path)
     return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
-
 @app.route('/play')
 @app.route('/play/<name>')
 def play(name):
     global songs_in_dir
+    get_songs_in_dir(path)
     print(name)
-    split_audio(0, 10, path + "/" + name)
-    #wave_data = wave.open(path + "/" + name, "r")
-    #wave_data = wave.open("newSong.wav")
-    #bytes_data = wave_data.readframes(-1)
-    #Other Variant:
-    f = open("newSong.wav", "rb")
-    wav_data = f.read()
-    f.close()
-    bytes_data = bytearray(wav_data)
-    in_string = bytes_data.decode("latin-1")
     client.loop_start()
-    client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
+    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
     client.loop_stop()
-    time.sleep(0.1)
+    time.sleep(0.01)
+    #Funktion für Streaming: 
+    audio_streaming(path+"/"+name, name) # TODO: Receive für Raspberry schreiben
     return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
-
-
-#@app.route('/', methods=['GET', 'POST'])
-#def play():
-#    print("i am here")
-#    global songs_in_dir
-#    if request.method == "POST":
-#        name =  request.form.get("play_button")
-#        print(name)
-#        split_audio(0, 20, path + "/" + name)
-#        f = open("newSong.wav", "rb")
-#        wav_data = f.read()
-#        f.close()
-#        bytes_data = bytearray(wav_data)
-#        in_string = bytes_data.decode("latin-1")
-#        client.loop_start()
-#        client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
-#        client.loop_stop()
-#        time.sleep(0.1)
-#    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
-
-def split_audio(start, end, file):
-    start = start * 1000
-    end = end * 1000
-    newAudio = AudioSegment.from_wav(file)
-    newAudio = newAudio[start:end]
-    newAudio.export("newSong.wav", format="wav")
-    
 
 @app.route('/stop')
 def stop():
+    global songs_in_dir
+    get_songs_in_dir(path)
     client.loop_start()
+    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-stop", qos=1)
+    time.sleep(0)
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-" + "stop", qos=1)
     #time.sleep(1)
     client.loop_stop()
@@ -181,7 +183,11 @@ def stop():
 
 @app.route('/pause')
 def pause():
+    global songs_in_dir
+    get_songs_in_dir(path)
     client.loop_start()
+    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-pause", qos=1)
+    time.sleep(0)
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-" + "pause", qos=1)
     client.loop_stop()
     time.sleep(0.1)
@@ -190,7 +196,11 @@ def pause():
 
 @app.route('/unpause')
 def unpause():
+    global songs_in_dir
+    get_songs_in_dir(path)
     client.loop_start()
+    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-unpause", qos=1)
+    time.sleep(0)
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-" + "unpause", qos=1)
     client.loop_stop()
     time.sleep(0.1)
@@ -200,11 +210,15 @@ def unpause():
 @app.route('/volume')
 @app.route('/volume/<volume>')
 def volume(volume):
+    global songs_in_dir
+    get_songs_in_dir(path)
     #volume=request.args["rangeval"]
     print(volume)
     val = float(volume)
     valPyGame = val/100
     client.loop_start() 
+    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-volumne", qos=1)
+    time.sleep(0)
     client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-"+str(valPyGame), qos=1)
     client.loop_stop()
     time.sleep(1)
