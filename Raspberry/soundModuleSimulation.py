@@ -43,8 +43,8 @@ def on_message(client, userdata, msg):
             if(received[1] == "play" and received[2] != None):
                 #song = directory + received[2]
                 #print(str(song) + " is loaded")
-                bytes_data = bytearray(received[2].encode("utf-8"))
-                song = AudioSegment(bytes_data, sample_width=2, frame_rate=44100, channels=2)
+                new_bytes = received[2].encode("latin-1")
+                song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
                 song.export("file.wav", format="wav")
                 mixer.music.load("file.wav")
                 mixer.music.play()

@@ -119,12 +119,13 @@ def showSongs():
     songs_in_dir = os.listdir(path)
     return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
+
 @app.route('/play')
 @app.route('/play/<name>')
 def play(name):
     global songs_in_dir
     print(name)
-    split_audio(0, 20, path + "/" + name)
+    split_audio(0, 10, path + "/" + name)
     #wave_data = wave.open(path + "/" + name, "r")
     #wave_data = wave.open("newSong.wav")
     #bytes_data = wave_data.readframes(-1)
@@ -139,6 +140,26 @@ def play(name):
     client.loop_stop()
     time.sleep(0.1)
     return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+
+
+#@app.route('/', methods=['GET', 'POST'])
+#def play():
+#    print("i am here")
+#    global songs_in_dir
+#    if request.method == "POST":
+#        name =  request.form.get("play_button")
+#        print(name)
+#        split_audio(0, 20, path + "/" + name)
+#        f = open("newSong.wav", "rb")
+#        wav_data = f.read()
+#        f.close()
+#        bytes_data = bytearray(wav_data)
+#        in_string = bytes_data.decode("latin-1")
+#        client.loop_start()
+#        client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
+#        client.loop_stop()
+#        time.sleep(0.1)
+#    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
 
 def split_audio(start, end, file):
     start = start * 1000

@@ -41,6 +41,7 @@ bytes_data = wave_data.readframes(-1)
 
 with open("newSong.wav", "rb") as f:
     wav_data = f.read()
+    
 byte_data = bytearray(wav_data)
 
 #f = open("bytes_data.txt", "wb")
