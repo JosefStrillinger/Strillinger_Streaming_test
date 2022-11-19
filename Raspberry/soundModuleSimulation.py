@@ -28,7 +28,7 @@ def on_connect(client, userdata, flags, rc, properties=None):
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
     global box_name, loggedIn
-    received = msg.payload.decode("utf-8").split("-")
+    received = msg.payload.decode("utf-8").split("-", 2)
     print(received)
     #print(received)
     if(received[0] == "server" and "=>" in received[1] and loggedIn == False):
@@ -41,10 +41,8 @@ def on_message(client, userdata, msg):
             print("Still running")
         else:    
             if(received[1] == "play" and received[2] != None):
-                #song = directory + received[2]
-                #print(str(song) + " is loaded")
                 new_bytes = received[2].encode("latin-1")
-                song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
+                song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)# Idee, schreiben wieso man diese Argumente braucht
                 song.export("file.wav", format="wav")
                 mixer.music.load("file.wav")
                 mixer.music.play()

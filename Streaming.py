@@ -6,7 +6,10 @@ import time
 import math
 import wave
 import os
+import pygame.mixer as mixer
+import pygame
 
+#The following is for Streaming, specifically for Sending
 def split_audio(start, end, file, export_name):
     start = start * 1000
     end = end * 1000
@@ -20,10 +23,10 @@ def get_audio_duration(song):
     length = int(audio_info.length)
     return length
 
-with open("newSong.wav", "rb") as f:
-    wav_data = f.read()   
-byte_data = bytearray(wav_data)
-string_test = byte_data.decode("latin-1")
+#with open("newSong.wav", "rb") as f:
+#    wav_data = f.read()   
+#byte_data = bytearray(wav_data)
+#string_test = byte_data.decode("latin-1")
 
 def audio_streaming(song_path, name):
     length_in_seconds = get_audio_duration(song_path)
@@ -34,11 +37,42 @@ def audio_streaming(song_path, name):
         byte_data = bytearray(wav_data)
         string_test = byte_data.decode("latin-1")
         #MQTT-Nachricht Einfügen
-        os.remove(name+str(i)+".wav")
-        time.sleep(1)
+        #os.remove(name+str(i)+".wav")
+        time.sleep(0)
         
         
-audio_streaming("flask_website/music/Fate.wav", "test")
-        
-        
-        
+
+
+
+# The following part is for receifing the Stream
+
+#TODO: Methode schreiben, die Daten bekommt, zu files macht und in playlist einfügt
+#evtl beachten, ob es gleicher song ist, wenn nicht alles was in queue ist herausladen
+      
+#Playing song
+def insert_into_playlist(playlist, music_file):
+    playlist.append(music_file)
+    
+def start_playlist(playlist):
+    mixer.music.load(playlist[0]) 
+    playlist.pop(0)
+    mixer.music.play()
+    mixer.music.queue(playlist[0])
+    playlist.pop(0)
+    mixer.music.set_endevent(pygame.USEREVENT+1)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.USEREVENT+1:
+                print("finished playing song")
+                if len(playlist) > 0:
+                    mixer.music.queue(playlist[0])
+                    playlist.pop(0)
+
+if __name__ == "__main__":
+    pygame.init()
+    playList = []
+    audio_streaming("flask_website/music/Fate.wav", "test")
+    for file in os.listdir():
+        if file.endswith(".wav"):
+            insert_into_playlist(playList, file)# Am besten sofort, wenn man files bekommt hineinladen ==> sonst evtl falsche reihenfolge
+    start_playlist(playList)
