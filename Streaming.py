@@ -60,19 +60,24 @@ def start_playlist(playlist):
     mixer.music.queue(playlist[0])
     playlist.pop(0)
     mixer.music.set_endevent(pygame.USEREVENT+1)
-    while True:
+    running = True
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.USEREVENT+1:
                 print("finished playing song")
                 if len(playlist) > 0:
                     mixer.music.queue(playlist[0])
                     playlist.pop(0)
+            if not mixer.music.get_busy():
+                running = False
+                break
 
 if __name__ == "__main__":
     pygame.init()
     playList = []
     audio_streaming("flask_website/music/Fate.wav", "test")
+    time.sleep(1)
     for file in os.listdir():
         if file.endswith(".wav"):
             insert_into_playlist(playList, file)# Am besten sofort, wenn man files bekommt hineinladen ==> sonst evtl falsche reihenfolge
-    start_playlist(playList)
+    start_playlist(playList)# Ist Endlosschleife ==> muss behoben werden
