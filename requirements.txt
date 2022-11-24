@@ -1,0 +1,11 @@
+ffmpeg==1.4
+Flask==2.2.2
+Flask_RESTful==0.3.9
+mutagen==1.46.0
+paho_mqtt==1.6.1
+pydub==0.25.1
+pygame==2.1.2
+simpleaudio==1.0.4
+SQLAlchemy==1.4.44
+Werkzeug==2.2.2
+youtube_dl==2021.12.17
