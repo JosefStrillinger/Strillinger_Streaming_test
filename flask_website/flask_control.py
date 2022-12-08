@@ -116,7 +116,7 @@ def split_audio(start, end, file, export_name):
     end = end * 1000
     newAudio = AudioSegment.from_mp3(file)
     newAudio = newAudio[start:end]
-    newAudio.export(export_name + ".wav", format="wav")
+    newAudio.export(export_name, format="wav")
  
 def get_audio_duration(song):
     audio = WAVE(song)
@@ -124,19 +124,33 @@ def get_audio_duration(song):
     length = int(audio_info.length)
     return length
 
+
+# The following is for sending the audio data as a string through mqtt
+#client.loop_start()
+#client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
+#client.loop_stop()
+
+
 def audio_streaming(song_path, name):
+    first_segment = True
     length_in_seconds = get_audio_duration(song_path)
     for i in range(math.ceil(length_in_seconds/10)):
-        split_audio(i*10, i*10+10, song_path, name+str(i))
-        with open(name+str(i)+".wav", "rb") as f:
+        split_audio(i*10, i*10+10, song_path, name+str(f"{i:02d}")+".wav")  #split_audio(i*10, i*10+10, song_path, name+str(i))
+        with open(name+str(f"{i:02d}") + ".wav" , "rb") as f:
             wav_data = f.read()    
         byte_data = bytearray(wav_data)
-        in_string = byte_data.decode("latin-1")
+        string_data = byte_data.decode("latin-1")
+        #MQTT-Nachricht Einfügen
         client.loop_start()
-        client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
+        client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-song-" + name+str(f"{i:02d}") + "-" + string_data, qos=1)
         client.loop_stop()
-        os.remove(name+str(i)+".wav")
-        time.sleep(1)
+        os.remove(name+str(f"{i:02d}")+".wav")
+        time.sleep(2)
+        if(first_segment):
+            #first_segment = False
+            client.loop_start()
+            client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
+            client.loop_stop()
 
 
 @app.route('/')
@@ -159,12 +173,10 @@ def play(name):
     global songs_in_dir
     get_songs_in_dir(path)
     print(name)
-    client.loop_start()
-    client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
-    client.loop_stop()
     time.sleep(0.01)
     #Funktion für Streaming: 
-    audio_streaming(path+"/"+name, name) # TODO: Receive für Raspberry schreiben
+    help = name.split(".")
+    audio_streaming(path+"/"+name, help[0]) # TODO: Receive für Raspberry schreiben
     return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
 
 @app.route('/stop')
