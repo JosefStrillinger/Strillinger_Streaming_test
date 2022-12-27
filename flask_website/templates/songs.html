@@ -1,68 +1,49 @@
 <!DOCTYPE html>
 
-<!--
-<link
-  rel="stylesheet"
-  href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"
-/>
-<link
-  rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-/>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-  crossorigin="anonymous"
-></script>
-<script
-  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-  crossorigin="anonymous"
-></script>
--->
-
 <head>
   <link rel="stylesheet" href="{{ url_for('static', filename='songs_style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='shared_style.css') }}" />
 </head>
 
 <title>SAS - Smart Audio System</title>
 
 <body>
-  <table id="songs" class="styled-table" style="width: 100%">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Play</th>
-        <th>Stop</th>
-        <th>Pause</th>
-        <th>Unpause</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for s in songs %}
-      <tr class="active-row">
-        <td>{{s.id}}</td>
-        <td>{{s.name}}</td>
-        <td>
-         <a class="button" href="/play/{{s.name}}" role="button">Play</a>
-         <!--<button type="submit" class="button" name="play_button" value="{{s.name}}" method="POST">Play</button>-->
-        </td>
-        <td>
-          <a class="button" href="/stop" role="button">Stop</a>
-        </td>
-        <td>
-          <a class="button" href="/pause" role="button">Pause</a>
-        </td>
-        <td>
-          <a class="button" href="/unpause" role="button">Unpause</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+  <nav class="navigation-bar">
+    <ul>
+      <li><a href="/" role="button">Startseite</a></li>
+      <li><a href="/account" role="button">Account</a></li>
+      <li><a href="/songs" role="button">Alle Songs</a></li>
+      <li><a href="/download" role="button">Download</a></li>
+    </ul>
+  </nav>
+
+  <div class="table-container">
+    <table id="songs" class="styled-table" style="width: 100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Play</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in songs %}
+        <tr class="active-row">
+          <td>{{s.id}}</td>
+          <td>{{s.name}}</td>
+          <td>
+            <form action="/play/{{s.name}}" method="POST">
+              <input type="submit" class="button" name="stop" value="PLAY">
+            </form>
+           <!--<a type="button" class="button" href="/play/{{s.name}}" role="button">Play</a>-->
+           <!--<button type="submit" class="button" name="play_button" value="{{s.name}}" method="POST">Play</button>-->
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
   <!--TODO: Control Bar schreiben (so wie Spotify), dazu noch zu machen:
           - Css von Buttons fixen ==> damit sie wieder sexy aussehen
           - Control bar soll unten kleben und immer zu sehen sein, solange man bei songs ist
@@ -75,38 +56,30 @@
           => Später Account seite machen
         -->
   <div class="control-bar"> 
-    <div class="control-bar-buffer"></div>
-    <div class="control-bar-actions">
-      <div class="control-bar-actions-stop">
-        <a class="button" href="/stop" role="button">Stop</a>
-      </div>
-      <div class="control-bar-actions-pause">
-        <a class="button" href="/pause" role="button">Pause</a>
-      </div>
-      <div class="control-bar-actions-unpause">
-        <a class="button" href="/unpause" role="button">Unpause</a>
-      </div>
-    </div>
-    <div class="control-bar-buffer"></div>
+
+    <form action="/stop" method="POST">
+      <input type="submit" class="button" name="stop" value="STOP">
+    </form>
+  
+    <form action="/pause" method="POST">
+      <input type="submit" class="button" name="pause" value="PAUSE">
+    </form>
+  
+    <form action="/unpause" method="POST">
+      <input type="submit" class="button" name="unpause" value="UNPAUSE">
+    </form>
+    <form action="/volume" method="POST">
+      <label for="volume">Volume: </label>
+      <input id="volume" name="volume" type="text"/>
+      <input type="submit" class="button" name="volume_btn" value="SET VOLUME" />
+    </form>
+    
   </div>
-  <form action="/volume" method="post" enctype="multi/form-data" id="form">
+  <!--<form action="/volume" method="post" enctype="multi/form-data" id="form">
     <label for="volume">Volume: </label>
     <input id="volume" type="text" />
     <a href="javascript:;" onclick="this.href='/volume/' + document.getElementById('volume').value">Send</a>
-  </form>
+  </form>-->
+  
 </body>
 
-
-<!--
-<script>
-  $(document).ready(function () {
-    $("#songs").DataTable();
-  });
-
-  $(document).ready(function () {
-    $("#songs").DataTable();
-  });
-</script>
--->
-
-<a class="btn btn-primary" href="/" role="button">Back to main menu </a>

@@ -5,7 +5,7 @@ from flask_restful import Api
 #from requests import request
 #from model import Question, getRandomQuestion, getData, Service, AllQuests, getQuests
 from rest import MusicInfo, Service, getMusicInfo
-from flask import Flask, render_template, session, request, url_for
+from flask import Flask, render_template, session, request, url_for, redirect
 from pygame import mixer
 import time
 import paho.mqtt.client as paho
@@ -14,6 +14,7 @@ import time
 from pydub import AudioSegment
 from mutagen.wave import WAVE
 import math
+from youtube_downloader import AudioDownloaderYouTube
 
 #
 # Copyright 2021 HiveMQ GmbH
@@ -124,12 +125,10 @@ def get_audio_duration(song):
     length = int(audio_info.length)
     return length
 
-
 # The following is for sending the audio data as a string through mqtt
 #client.loop_start()
 #client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
 #client.loop_stop()
-
 
 def audio_streaming(song_path, name):
     first_segment = True
@@ -147,16 +146,27 @@ def audio_streaming(song_path, name):
         os.remove(name+str(f"{i:02d}")+".wav")
         time.sleep(2)
         if(first_segment):
-            #first_segment = False
+            first_segment = False
             client.loop_start()
             client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
             client.loop_stop()
-
 
 @app.route('/')
 def start():
     return render_template("startseite.html")
 
+@app.route('/download')
+def download():
+    return render_template("download.html")
+
+@app.route('/download_song', methods=['GET', 'POST'])
+def download_song():
+    link_to_song = request.form.get("link")
+    ady = AudioDownloaderYouTube([link_to_song])
+    ady.set_params(path, "wav")
+    ady.download()
+    return redirect(url_for("download"))
+    
 @app.route('/songs')
 def showSongs():
     #client.loop_start()
@@ -168,7 +178,7 @@ def showSongs():
     return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
 
 @app.route('/play')
-@app.route('/play/<name>')
+@app.route('/play/<name>', methods=['GET', 'POST'])
 def play(name):
     global songs_in_dir
     get_songs_in_dir(path)
@@ -177,9 +187,10 @@ def play(name):
     #Funktion für Streaming: 
     help = name.split(".")
     audio_streaming(path+"/"+name, help[0]) # TODO: Receive für Raspberry schreiben
-    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    #return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    return redirect(url_for("showSongs"))
 
-@app.route('/stop')
+@app.route('/stop', methods=['GET', 'POST'])
 def stop():
     global songs_in_dir
     get_songs_in_dir(path)
@@ -191,9 +202,10 @@ def stop():
     client.loop_stop()
     time.sleep(0.1)
     #mixer.music.stop()
-    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    #return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    return redirect(url_for("showSongs"))
 
-@app.route('/pause')
+@app.route('/pause', methods=['GET', 'POST'])
 def pause():
     global songs_in_dir
     get_songs_in_dir(path)
@@ -204,9 +216,10 @@ def pause():
     client.loop_stop()
     time.sleep(0.1)
     #mixer.music.pause()
-    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    #return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    return redirect(url_for("showSongs"))
 
-@app.route('/unpause')
+@app.route('/unpause', methods=['GET', 'POST'])
 def unpause():
     global songs_in_dir
     get_songs_in_dir(path)
@@ -217,11 +230,13 @@ def unpause():
     client.loop_stop()
     time.sleep(0.1)
     #mixer.music.unpause()
-    return render_template("songs.html", songs=getMusicInfo(songs_in_dir))  
+    #return render_template("songs.html", songs=getMusicInfo(songs_in_dir))
+    return redirect(url_for("showSongs"))
 
 @app.route('/volume')
-@app.route('/volume/<volume>')
-def volume(volume):
+@app.route('/volume', methods=['GET', 'POST'])
+def volume():
+    volume = request.form.get('volume')
     global songs_in_dir
     get_songs_in_dir(path)
     #volume=request.args["rangeval"]
@@ -235,7 +250,8 @@ def volume(volume):
     client.loop_stop()
     time.sleep(1)
     print(valPyGame)
-    return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
+    #return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
+    return redirect(url_for("showSongs"))
 
 #TODO: Sound ändern einfügen
 

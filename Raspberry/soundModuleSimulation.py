@@ -9,6 +9,7 @@ from paho import mqtt
 from pygame import mixer
 from pydub import AudioSegment
 import pygame
+import threading
 
 directory = "Sound/"
 
@@ -90,12 +91,15 @@ def on_message(client, userdata, msg):
                 #new_bytes = received[3].encode("latin-1")
                 #song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)# Idee, schreiben wieso man diese Argumente braucht
                 #song.export("file.wav", format="wav")
-                
-                pass
-                #start_playlist()
+ 
+                #thread = threading.Thread(target=start_playlist)
+                #thread.start()
+                start_playlist()
                 #print(received[0] + ": " + received[1] + ", " + received[2])
             else:
                 if(received[1] == "song" and received[3] != None):
+                    #thread = threading.Thread(target=receive_song(received[3], "Raspberry/received_samples", received[2]))
+                    #thread.start()
                     receive_song(received[3], "Raspberry/received_samples", received[2])
                     #start_playlist()
                     #path = "Sound/"

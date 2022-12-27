@@ -1,13 +1,30 @@
 <!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='shared_style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='start_style.css') }}" />
+  </head>
+
+
+
+<body>
+
+    <nav class="navigation-bar">
+        <ul>
+          <li><a href="/" role="button">Startseite</a></li>
+          <li><a href="/account" role="button">Account</a></li>
+          <li><a href="/songs" role="button">Alle Songs</a></li>
+          <li><a href="/download" role="button">Download</a></li>
+        </ul>
+    </nav>
+
+    <div class="header-container">
+        <h1 class="gradient-text">SAS - Smart Audio System</h1>
+    </div>
+
+</body>
+
 <!--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    TODO:
+        Data Visualization, Account (login, session management), multithreading, planning deployment, better css
 -->
-
-<h1>Music Panel</h1>
-
-<a class="btn btn-primary" href="/account" role="button">Account</a>
-
-<a class="btn btn-primary" href="/songs" role="button">Alle Songs</a>

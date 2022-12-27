@@ -1,42 +1,46 @@
 .styled-table{
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 1em;
-    min-width: 400px;
-    border-radius: 5px 5px 0 0;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 1em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .styled-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 
 .styled-table tbody tr {
-    border-bottom: thin solid #dddddd;
-    min-height:fit-content;
+  border-bottom: thin solid #dddddd;
+  min-height:fit-content;
 }
 
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+  background-color: #f3f3f3;
 }
 
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+  border-bottom: 2px solid #009879;
 }
 
 .styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #009879;
+  font-weight: bold;
+  color: #009879;
+}
+
+.table-container{
+  padding-top: 1.5%;
 }
 
 .button {
@@ -96,46 +100,14 @@
   }
 
 .control-bar{
-    position:absolute;
-    width:100%;
-    color:black;
-    display:flex;
-    justify-content: center;
-    flex-direction:column;
-}
-
-.control-bar-actions{
+    
     width:100%;
     overflow:hidden;
     position:fixed;
     display:flex;
     bottom: 0;
-    justify-content:center;
+    gap: 20px;
+    padding-bottom: 20px;
+    justify-content: center;
 }
 
-.control-bar-actions-stop{
-    background-color: red;
-    display: flex;
-    justify-content: right;
-    width:30%;
-}
-.control-bar-actions-pause{
-    background-color: blue;
-    display: flex;
-    justify-content: center;
-    width:30%;
-}
-.control-bar-actions-unpause{
-    background-color: green;
-    display: flex;
-    justify-content: left;
-    width:30%;
-}
-.control-bar-buffer{
-    position:relative;
-    width: 20%;
-    height: 100%;
-    display:flex;
-}
-  
- 
