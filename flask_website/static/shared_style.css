@@ -1,33 +1,42 @@
-.navigation-bar{
-    width: 100%;
-    overflow: hidden;
-    position: fixed;
-    display: flex;
-    top:0;
-    background-color: #333;
-    margin-bottom: 2%;
+.navigation-bar {
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  display: flex;
+  top: 0;
+  background-color: #333;
+  margin-bottom: 2%;
+  left: 0;
+  z-index: 100000;
 }
 
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-  }
-  
-  li {
-    float: left;
-  }
-  
-  li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-  
-  li a:hover {
-    background-color: #111;
-  }
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+li a:active{
+  background-color: #111;
+}

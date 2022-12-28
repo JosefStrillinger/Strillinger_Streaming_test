@@ -1,3 +1,44 @@
-.form-container{
-    padding-top: 3%;
+html {
+  height: 100vh;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.content-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  background-color: whitesmoke;
+  padding: 7% 15%;
+}
+
+.input-field {
+  padding: 10px 20px;
+  margin: 10px;
+  min-width: 200px;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+
+.submit-button {
+  appearance: none;
+  -webkit-appearance: none;
+
+  padding: 10px 20px;
+  border: none;
+  background-color: #3f51b5;
+  color: white;
+  font-weight: 600;
+  border-radius: 5px;
+  min-width: 100px;
+  cursor: pointer;
 }

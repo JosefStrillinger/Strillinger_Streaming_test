@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='shared_style.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='start_style.css') }}" />
-  </head>
-
-
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='shared_style.css') }}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='start_style.css') }}"
+  />
+</head>
 
 <body>
+  <nav class="navigation-bar">
+    <ul>
+      <li><a href="/" role="button">Startseite</a></li>
+      <li><a href="/account" role="button">Account</a></li>
+      <li><a href="/songs" role="button">Player</a></li>
+      <li><a href="/download" role="button">Download</a></li>
+    </ul>
+  </nav>
 
-    <nav class="navigation-bar">
-        <ul>
-          <li><a href="/" role="button">Startseite</a></li>
-          <li><a href="/account" role="button">Account</a></li>
-          <li><a href="/songs" role="button">Alle Songs</a></li>
-          <li><a href="/download" role="button">Download</a></li>
-        </ul>
-    </nav>
+  <div class="header-container">
+    <h1 class="gradient-text">SAS - Smart Audio System</h1>
+  </div>
 
-    <div class="header-container">
-        <h1 class="gradient-text">SAS - Smart Audio System</h1>
-    </div>
-
+  <div class="content-card">
+    This is a card
+  </div><!--Make cards, in which to display information, maybe add animations, so that cards can float around when hovering above them-->
 </body>
 
 <!--
     TODO:
         Data Visualization, Account (login, session management), multithreading, planning deployment, better css
+        make homepage look delectible
 -->

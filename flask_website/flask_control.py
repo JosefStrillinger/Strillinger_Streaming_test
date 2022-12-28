@@ -115,7 +115,7 @@ def get_songs_in_dir(path):
 def split_audio(start, end, file, export_name):
     start = start * 1000
     end = end * 1000
-    newAudio = AudioSegment.from_mp3(file)
+    newAudio = AudioSegment.from_file(file)
     newAudio = newAudio[start:end]
     newAudio.export(export_name, format="wav")
  

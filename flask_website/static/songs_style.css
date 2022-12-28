@@ -1,4 +1,8 @@
-.styled-table{
+:root{
+  --color: rgb(0, 123, 111);
+}
+
+.styled-table {
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 1em;
@@ -6,10 +10,12 @@
   border-radius: 5px 5px 0 0;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
 }
 
 .styled-table thead tr {
-  background-color: #009879;
+  background-color: var(--color);
   color: #ffffff;
   text-align: left;
 }
@@ -21,93 +27,118 @@
 
 .styled-table tbody tr {
   border-bottom: thin solid #dddddd;
-  min-height:fit-content;
+  min-height: fit-content;
 }
-
 
 .styled-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 
-
 .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 2px solid var(--color);
 }
 
 .styled-table tbody tr.active-row {
   font-weight: bold;
-  color: #009879;
+  color: var(--color);
 }
 
-.table-container{
+.table-container {
   padding-top: 1.5%;
+  padding-bottom: 3%;
 }
 
 .button {
-    min-width: 150px;
-    min-height: 30px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1.3px;
-    font-weight: 700;
-    color: #313133;
-    background: #4FD1C5;
-    background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
-    border: none;
-    border-radius: 300px;
-    box-shadow: 12px 12px 24px rgba(79,209,197,.64);
-    transition: all 0.3s ease-in-out 0s;
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    padding: 10px;
-    }
-  
-  .button::before {
-    content: '';
-    border-radius: 300px;
-    min-width: calc(150px + 0px);
-    min-height: calc(30px + 5px);
-    border: 6px solid #00FFCB;
-    box-shadow: 0 0 60px rgba(0,255,203,.64);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: all .3s ease-in-out 0s;
-  }
-  
-  .button:hover, .button:focus {
-    color: #313133;
-    transform: translateY(0px);
-  }
-  
-  button:hover::before, button:focus::before {
-    opacity: 1;
-  }
-  
-  button::after {
-    content: '';
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  button:hover::after, button:focus::after {
-    display: none;
-  }
-
-.control-bar{
-    
-    width:100%;
-    overflow:hidden;
-    position:fixed;
-    display:flex;
-    bottom: 0;
-    gap: 20px;
-    padding-bottom: 20px;
-    justify-content: center;
+  min-width: 150px;
+  min-height: 30px;
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: white;
+  background: var(--color);
+  background: linear-gradient(
+    90deg,
+    var(--color) 0%,
+    var(--color) 100%
+  );
+  border: none;
+  border-radius: 300px;
+  box-shadow: 2px 3px 4px rgba(79, 209, 197, 0.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  padding: 10px;
 }
 
+.button::before {
+  content: "";
+  border-radius: 300px;
+  min-width: calc(150px + 0px);
+  min-height: calc(30px + 5px);
+  border: 6px solid var(--color);
+  box-shadow: 0 0 10px var(--color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.button:hover,
+.button:focus {
+  color: white;
+}
+
+button:hover::before,
+button:focus::before {
+  opacity: 1;
+}
+
+button::after {
+  content: "";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button:hover::after,
+button:focus::after {
+  display: none;
+}
+
+.control-bar {
+  background-color: whitesmoke;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  gap: 20px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  justify-content: center;
+  border-top: black;
+  z-index: 100000;
+}
+
+.volume-input {
+  padding: 10px 20px;
+  min-width: 200px;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+
+.volume-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+}

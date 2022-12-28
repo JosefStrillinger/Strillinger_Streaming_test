@@ -1,25 +1,45 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='shared_style.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='download_style.css') }}" />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='shared_style.css') }}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='download_style.css') }}"
+  />
 </head>
 
-
-<body>
+<html>
+  <body>
     <nav class="navigation-bar">
       <ul>
         <li><a href="/" role="button">Startseite</a></li>
         <li><a href="/account" role="button">Account</a></li>
-        <li><a href="/songs" role="button">Alle Songs</a></li>
+        <li><a href="/songs" role="button">Player</a></li>
         <li><a href="/download" role="button">Download</a></li>
       </ul>
     </nav>
 
-    <div class="form-container">
+    <div class="content-container">
+      <div class="form-container">
         <form action="/download_song" method="post">
-          <input type="text" name="link" id="link" placeholder="Link to song">
-          <input type="submit" class="button" name="download_button" value="Download">
+          <input
+            type="text"
+            class="input-field"
+            name="link"
+            id="link"
+            placeholder="Link to song / playlist"
+          />
+          <input
+            type="submit"
+            class="submit-button"
+            name="download_button"
+            value="Download"
+          />
         </form>
+      </div>
     </div>
-</body>
+  </body>
+</html>
