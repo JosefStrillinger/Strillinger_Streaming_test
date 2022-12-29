@@ -1,55 +1,69 @@
 <!DOCTYPE html>
 
 <head>
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='songs_style.css') }}"
-  />
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='shared_style.css') }}"
-  />
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='songs_style.css') }}"
+    />
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='shared_style.css') }}"
+    />
 </head>
 
 <title>SAS - Smart Audio System</title>
 
 <body>
-  <nav class="navigation-bar">
-    <ul>
-      <li><a href="/" role="button">Startseite</a></li>
-      <li><a href="/account" role="button">Account</a></li>
-      <li><a href="/songs" role="button">Player</a></li>
-      <li><a href="/download" role="button">Download</a></li>
-    </ul>
-  </nav>
+    <header>
+        <a class="logo-link" href="/"
+            ><img
+                class="logo"
+                src="{{ url_for('static', filename='logo.png')}}"
+                alt="logo"
+                href="/"
+        /></a>
+        <nav>
+            <ul class="nav_links">
+                <li><a href="/" role="button">Startseite</a></li>
+                <li><a href="/songs" role="button">Player</a></li>
+                <li><a href="/download" role="button">Download</a></li>
+            </ul>
+        </nav>
+        <a href="/account" role="button">Account</a>
+    </header>
 
-  <div class="table-container">
-    <table id="songs" class="styled-table" style="width: 100%">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Play</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for s in songs %}
-        <tr class="active-row">
-          <td>{{s.id}}</td>
-          <td>{{s.name}}</td>
-          <td>
-            <form action="/play/{{s.name}}" method="POST">
-              <input type="submit" class="button" name="stop" value="PLAY" />
-            </form>
-            <!--<a type="button" class="button" href="/play/{{s.name}}" role="button">Play</a>-->
-            <!--<button type="submit" class="button" name="play_button" value="{{s.name}}" method="POST">Play</button>-->
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <!--TODO: Control Bar schreiben (so wie Spotify), dazu noch zu machen:
+    <div class="table-container">
+        <table id="songs" class="styled-table" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Play</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in songs %}
+                <tr class="active-row">
+                    <td>{{s.id}}</td>
+                    <td>{{s.name}}</td>
+                    <td>
+                        <form action="/play/{{s.name}}" method="POST">
+                            <input
+                                type="submit"
+                                class="button"
+                                name="stop"
+                                value="PLAY"
+                            />
+                        </form>
+                        <!--<a type="button" class="button" href="/play/{{s.name}}" role="button">Play</a>-->
+                        <!--<button type="submit" class="button" name="play_button" value="{{s.name}}" method="POST">Play</button>-->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!--TODO: Control Bar schreiben (so wie Spotify), dazu noch zu machen:
           - Css von Buttons fixen ==> damit sie wieder sexy aussehen
           - Control bar soll unten kleben und immer zu sehen sein, solange man bei songs ist
           - Die 3 Buttons neben einander in der Mitte platzieren
@@ -60,40 +74,45 @@
           => Youtube - Download + wav converter schreiben und testen
           => Später Account seite machen
         -->
-  <div class="control-bar">
-    <form action="/stop" method="POST">
-      <input type="submit" class="button" name="stop" value="STOP" />
-    </form>
+    <div class="control-bar">
+        <form action="/stop" method="POST">
+            <input type="submit" class="button" name="stop" value="STOP" />
+        </form>
 
-    <form action="/pause" method="POST">
-      <input type="submit" class="button" name="pause" value="PAUSE" />
-    </form>
+        <form action="/pause" method="POST">
+            <input type="submit" class="button" name="pause" value="PAUSE" />
+        </form>
 
-    <form action="/unpause" method="POST">
-      <input type="submit" class="button" name="unpause" value="UNPAUSE" />
-    </form>
-    <form action="/volume" method="POST">
-      <label for="volume" class="volume-label">Volume: </label>
-      <input
-        class="volume-input"
-        id="volume"
-        name="volume"
-        type="text"
-        placeholder="in percent from 0 to 100"
-      />
-      <!--
+        <form action="/unpause" method="POST">
+            <input
+                type="submit"
+                class="button"
+                name="unpause"
+                value="UNPAUSE"
+            />
+        </form>
+        <form action="/volume" method="POST">
+            <label for="volume" class="volume-label">Volume: </label>
+            <input
+                class="volume-input"
+                id="volume"
+                name="volume"
+                type="text"
+                placeholder="in percent from 0 to 100"
+            />
+            <!--
         TODO:
         maybe change this to input range for a volume bar
       -->
-      <input
-        type="submit"
-        class="button"
-        name="volume_btn"
-        value="SET VOLUME"
-      />
-    </form>
-  </div>
-  <!--<form action="/volume" method="post" enctype="multi/form-data" id="form">
+            <input
+                type="submit"
+                class="button"
+                name="volume_btn"
+                value="SET VOLUME"
+            />
+        </form>
+    </div>
+    <!--<form action="/volume" method="post" enctype="multi/form-data" id="form">
     <label for="volume">Volume: </label>
     <input id="volume" type="text" />
     <a href="javascript:;" onclick="this.href='/volume/' + document.getElementById('volume').value">Send</a>

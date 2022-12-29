@@ -25,12 +25,12 @@ loggedIn = False
 playlist = []
 
 def on_connect(client, userdata, flags, rc, properties=None):
-    #("CONNACK received with code %s." % rc)
+    print("CONNACK received with code %s." % rc)
     pygame.init()
     mixer.init()
     mixer.music.set_volume(0.1)
 
-def receive_songs(string_data, dir_path, name):
+def receive_songs(string_data, dir_path, name): # Old version, now count is already done by audio_streaming in flask_control
     new_bytes = string_data.encode("latin-1")
     count = 0
     for path in os.scandir(dir_path):
@@ -40,6 +40,7 @@ def receive_songs(string_data, dir_path, name):
     song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
     song.export(dir_path + "/" + name + str(f"{count:02d}") +".wav", format="wav")
     playlist.append(dir_path + "/" + name + str(f"{count:02d}") +".wav") 
+    print(playlist)
 
 def insert_into_playlist(dir_path, playlist):
     for file in os.listdir(dir_path):
@@ -48,16 +49,21 @@ def insert_into_playlist(dir_path, playlist):
                 playlist.append(file)
 
 def receive_song(string_data, dir_path, name):
+    global playlist
     new_bytes = string_data.encode("latin-1")
     song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)
     song.export(dir_path + "/" + name +".wav", format="wav")
-    playlist.append(dir_path + "/" + name +".wav")   
+    playlist.append(dir_path + "/" + name +".wav")
+    print(playlist)   
     
 def start_playlist():
-    mixer.music.load(playlist[0]) 
+    global playlist
+    mixer.music.load(playlist[0])
+    os.remove(playlist[0])
     playlist.pop(0)
     mixer.music.play()
     mixer.music.queue(playlist[0])
+    os.remove(playlist[0])
     playlist.pop(0)
     mixer.music.set_endevent(pygame.USEREVENT+1)
     running = True
@@ -67,6 +73,7 @@ def start_playlist():
                 print("finished playing song")
                 if len(playlist) > 0:
                     mixer.music.queue(playlist[0])
+                    os.remove(playlist[0])
                     playlist.pop(0)
             if not mixer.music.get_busy():
                 running = False
@@ -74,7 +81,7 @@ def start_playlist():
 
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
-    global box_name, loggedIn
+    global box_name, loggedIn, playlist
     received = msg.payload.decode("utf-8").split("-", 3)
     #print(received)
     #print(received)
@@ -92,15 +99,20 @@ def on_message(client, userdata, msg):
                 #song = AudioSegment(new_bytes, sample_width=2, frame_rate=44100, channels=2)# Idee, schreiben wieso man diese Argumente braucht
                 #song.export("file.wav", format="wav")
  
-                #thread = threading.Thread(target=start_playlist)
-                #thread.start()
-                start_playlist()
+                thread_play = threading.Thread(target=start_playlist, args=(2,))
+                thread_play.start()
+                print("started play thread")
+                print(threading.currentThread())
+                print(threading.active_count())
+                #pass
+                #start_playlist()
                 #print(received[0] + ": " + received[1] + ", " + received[2])
             else:
                 if(received[1] == "song" and received[3] != None):
-                    #thread = threading.Thread(target=receive_song(received[3], "Raspberry/received_samples", received[2]))
-                    #thread.start()
+                    #thread_get = threading.Thread(target=receive_song(received[3], "Raspberry/received_samples", received[2]), args=(3,))
+                    #thread_get.start()
                     receive_song(received[3], "Raspberry/received_samples", received[2])
+                    print(received[2])
                     #start_playlist()
                     #path = "Sound/"
                     #dir_list = os.listdir(path)

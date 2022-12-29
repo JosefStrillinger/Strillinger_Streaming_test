@@ -1,3 +1,4 @@
 flask_website/music/ChildrenOfTheOmnissiah.wav
 __pycache__/
 flask_website/__pycache__
+*.wav

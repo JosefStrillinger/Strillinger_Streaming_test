@@ -103,7 +103,7 @@ client.loop_stop()
 #client.loop_forever()
 
 app = Flask(__name__)
-app.secret_key = "epjsmp2021/22"
+app.secret_key = "sas_diplomarbeit_21/22"
 api = Api(app)
 
 #url_for('static', filename='style.css')
@@ -133,8 +133,8 @@ def get_audio_duration(song):
 def audio_streaming(song_path, name):
     first_segment = True
     length_in_seconds = get_audio_duration(song_path)
-    for i in range(math.ceil(length_in_seconds/10)):
-        split_audio(i*10, i*10+10, song_path, name+str(f"{i:02d}")+".wav")  #split_audio(i*10, i*10+10, song_path, name+str(i))
+    for i in range(math.ceil(length_in_seconds/5)):
+        split_audio(i*5, i*5+5, song_path, name+str(f"{i:02d}")+".wav")  #split_audio(i*10, i*10+10, song_path, name+str(i))
         with open(name+str(f"{i:02d}") + ".wav" , "rb") as f:
             wav_data = f.read()    
         byte_data = bytearray(wav_data)
@@ -144,12 +144,13 @@ def audio_streaming(song_path, name):
         client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-song-" + name+str(f"{i:02d}") + "-" + string_data, qos=1)
         client.loop_stop()
         os.remove(name+str(f"{i:02d}")+".wav")
-        time.sleep(2)
+        time.sleep(4)
         if(first_segment):
             first_segment = False
             client.loop_start()
             client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
             client.loop_stop()
+            time.sleep(0.1)
 
 @app.route('/')
 def start():

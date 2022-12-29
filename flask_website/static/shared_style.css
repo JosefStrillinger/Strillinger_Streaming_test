@@ -1,42 +1,67 @@
-.navigation-bar {
-  font-family: "Nunito", sans-serif;
-  font-size: 15px;
-  text-transform: uppercase;
-  width: 100%;
-  overflow: hidden;
-  position: fixed;
-  display: flex;
-  top: 0;
-  background-color: #333;
-  margin-bottom: 2%;
-  left: 0;
-  z-index: 100000;
+* {
+    font-family: "Nunito", sans-serif;
+    text-transform: uppercase;
 }
 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
+header {
+    font-size: 15px;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    padding: 0px 10%;
+    top: 0;
+    left: 0;
+    color: white;
+    z-index: 100000;
 }
 
-li {
-  float: left;
+.logo {
+    cursor: pointer;
+    height: 60px;
 }
 
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+.logo-link {
+    padding: 0px 0px;
+    margin: 0;
 }
 
-li a:hover {
-  background-color: #111;
+.nav_links {
+    list-style: none;
 }
 
-li a:active{
-  background-color: #111;
+.nav_links li {
+    display: inline-block;
+    margin: 0;
+    padding: 0px 10px;
+    text-decoration: none;
+}
+
+.nav_links li a {
+    color: white;
+    transition: all 0.3 ease 0s;
+    text-decoration: none;
+    
+}
+
+.nav_links li a:hover {
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    padding: 22px 30px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3 ease 0s;
+    font-weight: bold;
+}
+
+a:hover {
+    background-color: rgb(64, 59, 59);
 }

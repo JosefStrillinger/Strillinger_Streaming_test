@@ -1,144 +1,140 @@
-:root{
-  --color: rgb(0, 123, 111);
+:root {
+    --color: rgb(0, 123, 111);
 }
 
 .styled-table {
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 1em;
-  min-width: 400px;
-  border-radius: 5px 5px 0 0;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  font-family: "Nunito", sans-serif;
-  font-size: 15px;
+    border-collapse: collapse;
+    margin: 35px 0;
+    font-size: 1em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
 }
 
 .styled-table thead tr {
-  background-color: var(--color);
-  color: #ffffff;
-  text-align: left;
+    background-color: var(--color);
+    color: #ffffff;
+    text-align: left;
 }
 
 .styled-table th,
 .styled-table td {
-  padding: 12px 15px;
+    padding: 12px 15px;
 }
 
 .styled-table tbody tr {
-  border-bottom: thin solid #dddddd;
-  min-height: fit-content;
+    border-bottom: thin solid #dddddd;
+    min-height: fit-content;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+    background-color: #f3f3f3;
 }
 
 .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid var(--color);
+    border-bottom: 2px solid var(--color);
 }
 
 .styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: var(--color);
+    font-weight: bold;
+    color: var(--color);
 }
 
 .table-container {
-  padding-top: 1.5%;
-  padding-bottom: 3%;
+    padding-top: 1.5%;
+    padding-bottom: 3%;
 }
 
 .button {
-  min-width: 150px;
-  min-height: 30px;
-  font-family: "Nunito", sans-serif;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1.3px;
-  font-weight: 700;
-  color: white;
-  background: var(--color);
-  background: linear-gradient(
-    90deg,
-    var(--color) 0%,
-    var(--color) 100%
-  );
-  border: none;
-  border-radius: 300px;
-  box-shadow: 2px 3px 4px rgba(79, 209, 197, 0.64);
-  transition: all 0.3s ease-in-out 0s;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  padding: 10px;
+    min-width: 150px;
+    min-height: 30px;
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    font-weight: 700;
+    color: white;
+    background: var(--color);
+    background: linear-gradient(90deg, var(--color) 0%, var(--color) 100%);
+    border: none;
+    border-radius: 300px;
+    box-shadow: 2px 3px 4px rgba(79, 209, 197, 0.64);
+    transition: all 0.3s ease-in-out 0s;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    padding: 10px;
 }
 
 .button::before {
-  content: "";
-  border-radius: 300px;
-  min-width: calc(150px + 0px);
-  min-height: calc(30px + 5px);
-  border: 6px solid var(--color);
-  box-shadow: 0 0 10px var(--color);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: all 0.3s ease-in-out 0s;
+    content: "";
+    border-radius: 300px;
+    min-width: calc(150px + 0px);
+    min-height: calc(30px + 5px);
+    border: 6px solid var(--color);
+    box-shadow: 0 0 10px var(--color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.3s ease-in-out 0s;
 }
 
 .button:hover,
 .button:focus {
-  color: white;
+    color: white;
 }
 
 button:hover::before,
 button:focus::before {
-  opacity: 1;
+    opacity: 1;
 }
 
 button::after {
-  content: "";
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    content: "";
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 button:hover::after,
 button:focus::after {
-  display: none;
+    display: none;
 }
 
 .control-bar {
-  background-color: whitesmoke;
-  border: 0;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  position: fixed;
-  display: flex;
-  bottom: 0;
-  gap: 20px;
-  padding-bottom: 15px;
-  padding-top: 15px;
-  justify-content: center;
-  border-top: black;
-  z-index: 100000;
+    background-color: whitesmoke;
+    border: 0;
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    gap: 20px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    justify-content: center;
+    border-top: black;
+    z-index: 100000;
 }
 
 .volume-input {
-  padding: 10px 20px;
-  min-width: 200px;
-  border: 0;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+    padding: 10px 20px;
+    min-width: 200px;
+    border: 0;
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
 }
 
 .volume-label {
-  font-family: "Nunito", sans-serif;
-  font-size: 15px;
-  text-transform: uppercase;
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
+    text-transform: uppercase;
 }

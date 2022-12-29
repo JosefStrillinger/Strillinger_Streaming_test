@@ -1,45 +1,54 @@
 <!DOCTYPE html>
 
 <head>
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='shared_style.css') }}"
-  />
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='download_style.css') }}"
-  />
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='shared_style.css') }}"
+    />
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='download_style.css') }}"
+    />
 </head>
 
 <html>
-  <body>
-    <nav class="navigation-bar">
-      <ul>
-        <li><a href="/" role="button">Startseite</a></li>
-        <li><a href="/account" role="button">Account</a></li>
-        <li><a href="/songs" role="button">Player</a></li>
-        <li><a href="/download" role="button">Download</a></li>
-      </ul>
-    </nav>
+    <body>
+        <header>
+            <a class="logo-link" href="/"
+                ><img
+                    class="logo"
+                    src="{{ url_for('static', filename='logo.png')}}"
+                    alt="logo"
+                    href="/"
+            /></a>
+            <nav>
+                <ul class="nav_links">
+                    <li><a href="/" role="button">Startseite</a></li>
+                    <li><a href="/songs" role="button">Player</a></li>
+                    <li><a href="/download" role="button">Download</a></li>
+                </ul>
+            </nav>
+            <a href="/account" role="button">Account</a>
+        </header>
 
-    <div class="content-container">
-      <div class="form-container">
-        <form action="/download_song" method="post">
-          <input
-            type="text"
-            class="input-field"
-            name="link"
-            id="link"
-            placeholder="Link to song / playlist"
-          />
-          <input
-            type="submit"
-            class="submit-button"
-            name="download_button"
-            value="Download"
-          />
-        </form>
-      </div>
-    </div>
-  </body>
+        <div class="content-container">
+            <div class="form-container">
+                <form action="/download_song" method="post">
+                    <input
+                        type="text"
+                        class="input-field"
+                        name="link"
+                        id="link"
+                        placeholder="Link to song / playlist"
+                    />
+                    <input
+                        type="submit"
+                        class="submit-button"
+                        name="download_button"
+                        value="Download"
+                    />
+                </form>
+            </div>
+        </div>
+    </body>
 </html>
