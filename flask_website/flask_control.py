@@ -133,8 +133,8 @@ def get_audio_duration(song):
 def audio_streaming(song_path, name):
     first_segment = True
     length_in_seconds = get_audio_duration(song_path)
-    for i in range(math.ceil(length_in_seconds/5)):
-        split_audio(i*5, i*5+5, song_path, name+str(f"{i:02d}")+".wav")  #split_audio(i*10, i*10+10, song_path, name+str(i))
+    for i in range(math.ceil(length_in_seconds/10)):
+        split_audio(i*10, i*10+10, song_path, name+str(f"{i:02d}")+".wav")  #split_audio(i*10, i*10+10, song_path, name+str(i))
         with open(name+str(f"{i:02d}") + ".wav" , "rb") as f:
             wav_data = f.read()    
         byte_data = bytearray(wav_data)
@@ -146,11 +146,12 @@ def audio_streaming(song_path, name):
         os.remove(name+str(f"{i:02d}")+".wav")
         time.sleep(4)
         if(first_segment):
-            first_segment = False
             client.loop_start()
-            client.publish("pro/status", payload = client._client_id.decode("utf-8") + "-play", qos=1)
+            client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play", qos=1)
             client.loop_stop()
-            time.sleep(0.1)
+            print("play")
+            time.sleep(1)
+            first_segment = False
 
 @app.route('/')
 def start():
@@ -159,6 +160,17 @@ def start():
 @app.route('/download')
 def download():
     return render_template("download.html")
+
+@app.route('/account')
+def account():
+    #TODO: add functionality to account, not needed right now, maybe later
+    return render_template("account.html")
+
+
+@app.route('/data')
+def data():
+    #TODO: data vizualisation, maxi needed for knowledge on how to access db
+    return render_template("data.html")
 
 @app.route('/download_song', methods=['GET', 'POST'])
 def download_song():

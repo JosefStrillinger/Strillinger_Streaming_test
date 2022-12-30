@@ -20,23 +20,24 @@
       <li><a href="/download" role="button">Download</a></li>
     </ul>
   </nav>-->
-    <header>
-        <a class="logo-link" href="/"
-            ><img
-                class="logo"
-                src="{{ url_for('static', filename='logo.png')}}"
-                alt="logo"
-                href="/"
-        /></a>
-        <nav>
-            <ul class="nav_links">
-                <li><a href="/" role="button">Startseite</a></li>
-                <li><a href="/songs" role="button">Player</a></li>
-                <li><a href="/download" role="button">Download</a></li>
-            </ul>
-        </nav>
-        <a href="/account" role="button">Account</a>
-    </header>
+  <header>
+    <a class="logo-link" href="/"
+        ><img
+            class="logo"
+            src="{{ url_for('static', filename='logo.png')}}"
+            alt="logo"
+            href="/"
+    /></a>
+    <nav>
+        <ul class="nav_links">
+            <li><a href="/" role="button">Startseite</a></li>
+            <li><a href="/songs" role="button">Player</a></li>
+            <li><a href="/download" role="button">Download</a></li>
+            <li><a href="/data" role="button">Data</a></li>
+        </ul>
+    </nav>
+    <a href="/account" role="button">Account</a>
+</header>
 
     <div class="header-container">
         <h1 class="gradient-text">SAS - Smart Audio System</h1>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAS - Smart Audio System</title>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='shared_style.css') }}"
+    />
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='data_style.css') }}"
+    />
+</head>
+<body>
+    <header>
+        <a class="logo-link" href="/"
+            ><img
+                class="logo"
+                src="{{ url_for('static', filename='logo.png')}}"
+                alt="logo"
+                href="/"
+        /></a>
+        <nav>
+            <ul class="nav_links">
+                <li><a href="/" role="button">Startseite</a></li>
+                <li><a href="/songs" role="button">Player</a></li>
+                <li><a href="/download" role="button">Download</a></li>
+                <li><a href="/data" role="button">Data</a></li>
+            </ul>
+        </nav>
+        <a href="/account" role="button">Account</a>
+    </header>
+    
+</body>
+</html>
