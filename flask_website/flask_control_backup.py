@@ -5,7 +5,7 @@ from flask_restful import Api
 #from requests import request
 #from model import Question, getRandomQuestion, getData, Service, AllQuests, getQuests
 from rest import MusicInfo, Service, getMusicInfo
-from flask import Flask, render_template, session, request, url_for, redirect, send_file
+from flask import Flask, render_template, session, request, url_for, redirect
 from flask_mqtt import Mqtt
 from pygame import mixer
 import time
@@ -68,25 +68,35 @@ def on_message(client, userdata, msg):
             neededSongs.append(s)
             
         songsReceived = True
+        #runInputs(songsReceived, allSongs)
+# def on_log(client,userdata,level,buff):
+#     print(buff)  
 
 # using MQTT version 5 here, for 3.1.1: MQTTv311, 3.1: MQTTv31
 # userdata is user defined data of any type, updated by user_data_set()
 # client_id is the given name of the client
-
 client = paho.Client(client_id="main", userdata=None, protocol=paho.MQTTv5)
 client.on_connect = on_connect
 
+# enable TLS for secure connection
 client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
+# set username and password
 client.username_pw_set("project", "wasd1234")
+# connect to HiveMQ Cloud on port 8883 (default for MQTT)
+client.connect("cbe265c6cda342daa94ba67720ef1767.s2.eu.hivemq.cloud", 8883)
 
-client.connect("cbe265c6cda342daa94ba67720ef1767.s2.eu.hivemq.cloud", 8883, 65535)#3. value ist keepalive
-
-
+# setting callbacks, use separate functions like above for better visibility
+# client.on_subscribe = on_subscribe
 client.on_message = on_message
+# client.on_publish = on_publish
+# client.on_log = on_log
 
+# subscribe to all topics of encyclopedia by using the wildcard "#"
 client.subscribe("pro/music", qos=1)
 client.subscribe("pro/status", qos=1)
+# a single publish, this can also be done in loops, etc.
 
+#client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-play-Everything_Black.mp3", qos=1)
 
 client.loop_start()
 time.sleep(1)
@@ -121,7 +131,7 @@ def get_audio_duration(song):
 #client.publish("pro/music", payload = client._client_id.decode("utf-8") + "-play-" + in_string, qos=1)
 #client.loop_stop()
 
-def audio_streaming(song_path, name):# Einfügen, dass sobald stop gedrückt ist, nichts mehr gesendet wird (bool variable should_send)
+def audio_streaming(song_path, name):
     first_segment = True
     length_in_seconds = get_audio_duration(song_path)
     for i in range(math.ceil(length_in_seconds/10)):
@@ -257,7 +267,7 @@ def volume():
     #return render_template("songs.html", songs = getMusicInfo(songs_in_dir))
     return redirect(url_for("showSongs"))
 
-#TODO: 
+#TODO: Sound ändern einfügen
 
 api.add_resource(Service, "/rest/<int:id>")
 

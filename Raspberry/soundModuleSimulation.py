@@ -69,7 +69,7 @@ def receive_song(string_data, dir_path, name):
     write_list(shared_playlist)
     print(len(shared_playlist))   
     
-def start_playlist():
+def start_playlist(pause_event, stop_event, unpause_event, volume_event, volume_value):
     pygame.init()
     mixer.init()
     mixer.music.set_volume(0.5)
@@ -81,6 +81,25 @@ def start_playlist():
     mixer.music.set_endevent(pygame.USEREVENT+1)
     running = True
     while running:
+        if pause_event.is_set():
+            mixer.music.pause()
+            pause_event.clear()
+            print("paused")
+        if unpause_event.is_set():
+            mixer.music.unpause()
+            unpause_event.clear()
+            print("unpaused")
+        if volume_event.is_set():
+            mixer.music.set_volume(volume_value.value)
+            volume_event.clear()
+            print("volume changed")
+        if stop_event.is_set():
+            mixer.music.stop()
+            stop_event.clear()
+            print("stopped")
+            delete_old_resources()
+            reset_saves()
+            break
         for event in pygame.event.get():
             if event.type == pygame.USEREVENT+1:
                 print("finished playing song: "+ shared_playlist[count])
@@ -94,7 +113,7 @@ def start_playlist():
                     #mixer.music.queue(shared_playlist[count])
                     #os.remove(shared_playlist[0])
                     #shared_playlist.pop(0)
-                    #write_list(shared_playlist)e
+                    #write_list(shared_playlist)
                 else:
                     if not mixer.music.get_busy():
                         running = False
@@ -137,7 +156,7 @@ def on_message(client, userdata, msg):
  
                 #thread_play = threading.Thread(target=start_playlist)
                 #thread_play.start()
-                proc_play = mp.Process(target=start_playlist)
+                #proc_play = mp.Process(target=start_playlist)
                 proc_play.start()
                 #proc_play.join()
                 print("started play thread")
@@ -160,12 +179,21 @@ def on_message(client, userdata, msg):
                     #print(str(dir_list))
                     #client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-" + str(dir_list), qos=1)
                 elif(received[1] == "stop"):
+                    stop_event.set()
                     mixer.music.stop()
+                    print("stop")
                 elif(received[1] == "pause"):
+                    pause_event.set()
                     mixer.music.pause()
+                    print("pause")
                 elif(received[1] == "unpause"):
+                    unpause_event.set()
                     mixer.music.unpause()
+                    print("unpause")
                 elif(isFloat(received[1])):
+                    
+                    volume_value.value = float(received[1])
+                    volume_event.set()
                     mixer.music.set_volume(float(received[1]))
                 #print(received[0] + ": " + received[1])
                 #client.publish("pro/music", payload=client._client_id.decode("utf-8") + "-received", qos=1)
@@ -228,10 +256,18 @@ path = "Sound/"
 if __name__ == "__main__":
     #manager = mp.Manager()
     #shared_playlist = manager.list()
+    delete_old_resources()
+    reset_saves()
     c = initClient()
     pygame.init()
     mixer.init()
     mixer.music.set_volume(0.5)
+    pause_event = mp.Event()
+    stop_event = mp.Event()
+    unpause_event = mp.Event()
+    volume_value = mp.Value('d', 0.0)
+    volume_event = mp.Event()
+    proc_play = mp.Process(target=start_playlist, args=(pause_event, stop_event, unpause_event, volume_event, volume_value))
     c.loop_forever()
     
     #mp.freeze_support()
