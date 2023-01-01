@@ -160,7 +160,8 @@ def account():
 
 @app.route('/data')
 def data():
-    #TODO: data vizualisation, maxi needed for knowledge on how to access db
+    #TODO: data vizualisation
+    
     return render_template("data.html")
 
 @app.route('/download_song', methods=['GET', 'POST'])
